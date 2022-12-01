@@ -1,0 +1,29 @@
+{
+  "name": "nosqlsocial",
+  "version": "1.0.0",
+  "description": "Backend app with insomnia and Mongodb",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "dev": "nodemon index",
+    "seed": "node utils/seed",
+    "heroku-postbuild": "node utils/seed.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/einfalt4/nosqlsocial.git"
+  },
+  "keywords": [
+    "Nodejs"
+  ],
+  "author": "Randy Einfalt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/einfalt4/nosqlsocial/issues"
+  },
+  "homepage": "https://github.com/einfalt4/nosqlsocial#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^6.7.5"
+  }
+}
