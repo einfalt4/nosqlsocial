@@ -1,15 +1,16 @@
 const { ObjectId } = require('mongoose').Types;
-const { Student, Course } = require('../models');
+const { Thought , User } = require('../models');
+const User = require('../models/User');
 
-// Aggregate function to get the number of students overall
-const headCount = async () =>
-  Student.aggregate()
-    .count('studentCount')
-    .then((numberOfStudents) => numberOfStudents);
+// Aggregate function to get the number of thoughts overall
+const thoughtController = async () =>
+  Thought.aggregate()
+    .count('thoughtCount')
+    .then((numberOfThoughts) => numberOfThoughts);
 
 // Aggregate function for getting the overall grade using $avg
 const grade = async (studentId) =>
-  Student.aggregate([
+  Thought.aggregate([
     // only include the given student by using $match
     { $match: { _id: ObjectId(studentId) } },
     {
@@ -26,7 +27,7 @@ const grade = async (studentId) =>
 module.exports = {
   // Get all students
   getStudents(req, res) {
-    Student.find()
+    Thought.find()
       .then(async (students) => {
         const studentObj = {
           students,
@@ -41,7 +42,7 @@ module.exports = {
   },
   // Get a single student
   getSingleStudent(req, res) {
-    Student.findOne({ _id: req.params.studentId })
+    Thought.findOne({ _id: req.params.studentId })
       .select('-__v')
       .then(async (student) =>
         !student
@@ -58,17 +59,17 @@ module.exports = {
   },
   // create a new student
   createStudent(req, res) {
-    Student.create(req.body)
+    Thought.create(req.body)
       .then((student) => res.json(student))
       .catch((err) => res.status(500).json(err));
   },
   // Delete a student and remove them from the course
   deleteStudent(req, res) {
-    Student.findOneAndRemove({ _id: req.params.studentId })
+    Thought.findOneAndRemove({ _id: req.params.studentId })
       .then((student) =>
         !student
           ? res.status(404).json({ message: 'No such student exists' })
-          : Course.findOneAndUpdate(
+          : User.findOneAndUpdate(
               { students: req.params.studentId },
               { $pull: { students: req.params.studentId } },
               { new: true }
@@ -91,7 +92,7 @@ module.exports = {
   addAssignment(req, res) {
     console.log('You are adding an assignment');
     console.log(req.body);
-    Student.findOneAndUpdate(
+    Thought.findOneAndUpdate(
       { _id: req.params.studentId },
       { $addToSet: { assignments: req.body } },
       { runValidators: true, new: true }
@@ -107,7 +108,7 @@ module.exports = {
   },
   // Remove assignment from a student
   removeAssignment(req, res) {
-    Student.findOneAndUpdate(
+    Thought.findOneAndUpdate(
       { _id: req.params.studentId },
       { $pull: { assignment: { assignmentId: req.params.assignmentId } } },
       { runValidators: true, new: true }
