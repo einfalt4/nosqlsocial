@@ -24,6 +24,7 @@
   "homepage": "https://github.com/einfalt4/nosqlsocial#readme",
   "dependencies": {
     "express": "^4.18.2",
+    "moment": "^2.29.4",
     "mongoose": "^6.7.5"
   }
 }
